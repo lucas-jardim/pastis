@@ -1,0 +1,62 @@
+\name{read_input}
+\alias{read_input}
+\title{Called by create_job to read input files}
+\usage{
+  read_input(constraint_tree, taxa_list,
+    missing_clades = NA, sequences = NA,
+    output_template = NA)
+}
+\arguments{
+  \item{constraint_tree}{A tree with constraints that are
+  forced to be present in all output trees. Either a
+  filename to a nexus file readable by read.tree or a ape
+  phylo object.}
+
+  \item{taxa_list}{A list of all taxa and their clades.
+  Either a data frame with columns "taxa" and "clade" or a
+  filename for a file readable by read.csv with those
+  columns}
+
+  \item{missing_clades}{A file containing missing clades.
+  Each line of the missing clades file consists of the
+  missing clade, the word "include" or "exclude" and a list
+  of the reference clades (all separated by commas). Lines
+  containing "include" specify that a taxon is contained
+  below the MRCA of the reference clades. Lines containing
+  "exclude" specify that the missing clade cannot attach
+  below the MRCA of the reference clades. #'}
+
+  \item{output_template}{The filename for a template for
+  the output nexus file. This file should look like a
+  regular mrBayes input file with special tags replacing
+  content that will be filled by pastis. In particular:
+
+  <sequences> will be replaced by the sequences (and should
+  go below the MATRIX line)
+
+  <ntax> the number of taxa (i.e. "ntax=<ntax>" must be
+  somewhere in your template)
+
+  <nchar> the number of characters
+
+  <constraints> the constraints will go here
+
+  <outputfile> where the summaries will be written, (i.e.
+  \verb{"sumt filename=<outputfile> burnin ...."} should be
+  in your template)
+
+  see default_output_template for an example (which is used
+  by default)}
+
+  \item{sequences}{A file with all the available sequence
+  information in fasta format for details on that format
+  see read.dna in the ape package.}
+}
+\value{
+  A list with the loaded input
+}
+\description{
+  Reads the specified input files and performs some basic
+  consistency checking between the inputs.
+}
+

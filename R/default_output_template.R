@@ -1,0 +1,4 @@
+default_output_template <- function () 
+{
+    return("\nBegin DATA; \nDimensions ntax=<ntax> nchar=<nchar>;\nFormat datatype=DNA gap=- missing=?; \nMatrix \n\n<sequences>   \n  ; \n\n\nbegin MRBAYES; \n\nunlink shape=(all) tratio=(all) statefreq=(all) revmat=(all) pinvar=(all); \n<constraints>\n  \n  \n  set usebeagle=no Beaglesse=no; \n\nprset brlenspr=clock:birthdeath; \nprset Extinctionpr = Fixed(0); \nprset Speciationpr=exponential(1); \nprset clockvarpr=ibr; \nprset ibrvarpr=exponential(10); \nmcmcp nruns=1 nchains=1 ngen=50000000 samplefreq=1000; \nmcmc; \n\nsumt filename=<outputfile> burnin=5000000 contype=halfcompat;\n\nend; ")
+}
