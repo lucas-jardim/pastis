@@ -2,7 +2,8 @@
 \alias{pastis_simple}
 \title{A simplified interface to the main pastis function.}
 \usage{
-  pastis_simple(base_name, paraphyly_constrains = TRUE,
+  pastis_simple(pastisData = NULL, base_name,
+    paraphyly_constrains = TRUE,
     monophyly_constrains = TRUE, omit_sequences = FALSE)
 }
 \arguments{
@@ -10,12 +11,14 @@
   include a leading directory, but should not include a
   trailing .}
 
-  \item{paraphyly_constrains}{If true, missing clades are
+  \item{pastisData}{Input data object of class pastisData}
+
+  \item{paraphyly_constrains}{If TRUE, missing clades are
   prevented from entering paraphyletic clades.}
 
-  \item{monophyly_constrains}{If true, missing clades are
-  prevented from entering monophyletic clades.}
-  
+  \item{monophyly_constrains}{If TRUE, missing clades are
+  precented from entering monophyletic clades.}
+
   \item{omit_sequences}{If set to TRUE the sequence file
   (if any) will be ignored. This is useful for testing the
   constraints created by pastis as mrBayes runs much
@@ -30,8 +33,10 @@
 }
 \details{
   This is a simplified version of pastis_main which assumes
-  that the input files all have the same base (specified by
-  base_name) with diffferent extensions for each file type:
+  that (i) the data are input as a pastisData object (e.g.
+  created with read_input), or (ii) the input files all
+  have the same base (specified by base_name) with
+  diffferent extensions for each file type:
 
   .sequences: the sequence file (FASTA format)
 
@@ -65,5 +70,24 @@
   acting quite rowdy- weaving and squawking quite loudly
   "Pastis is delise" he burped with a sneese "but why is
   everything suddenly cloudy?"} -- \emph{Arne Mooers}
+}
+\examples{
+# Generate MrBayes input files with constraints
+\dontrun{
+data(accipitridaeFullPastis)
+pastis_simple(accipitridaeFullPastis, base_name="Accipitridae")
+
+data(accipitridaeBasicPastis)
+pastis_simple(accipitridaeBasicPastis, base_name="AccipitridaeBasic")
+}
+
+data(pastis_data_1)
+pastis_simple(pastis_data_1, base_name="pastis_data_1")
+
+data(pastis_data_2)
+pastis_simple(pastis_data_2, base_name="pastis_data_2")
+
+data(pastis_data_3)
+pastis_simple(pastis_data_3, base_name="pastis_data_3")
 }
 

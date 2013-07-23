@@ -9,7 +9,8 @@
   \item{constraint_tree}{the constraint tree used with
   pastis (either the filename or ape phylo tree)}
 
-  \item{mrbayes_output}{the mrBayes output .t file}
+  \item{mrbayes_output}{the mrBayes output .t file (either
+  the filename or ape multiPhylo tree object)}
 
   \item{simple_edge_scaling}{boolean, see function
   description}
@@ -45,5 +46,18 @@
   Note that this routine has not been optimised and slow
   (possibly unacceptable) performance is to be expected
   with large trees and/or large posterior samples.
+}
+\examples{
+data(pastis_data_3_trees)
+
+\dontrun{
+
+# Check constraints for all missing taxa (takes ~20 seconds to run)
+conch(pastis_data_3_trees[[1]], pastis_data_3_trees[[2]])
+
+}
+
+# Check constraints for missing taxon "a_4"
+conch(pastis_data_3_trees[[1]], pastis_data_3_trees[[2]], species_set="a_4")
 }
 

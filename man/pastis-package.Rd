@@ -8,11 +8,11 @@
 }
 \details{
   \tabular{ll}{ Package: \tab pastis\cr Type: \tab
-  Package\cr Version: \tab 0.1\cr Date: \tab 2013-05-27\cr
-  Depends: \tab caper (>= 0.5.0), ape (>= 3.0.0)\cr
-  Encoding: \tab UTF-8\cr License: \tab GPL (>= 3)\cr
-  LazyLoad: \tab yes\cr URL: \tab
- \cr }
+  Package\cr Version: \tab 0.1-1\cr Date: \tab
+  2013-97-23\cr Depends: \tab caper (>= 0.5.0), ape (>=
+  3.0.0)\cr Encoding: \tab UTF-8\cr License: \tab GPL (>=
+  3)\cr LazyLoad: \tab yes\cr URL: \tab
+  http://cran.r-project.org/web/packages/pastis/ }
 
   A pre-processor for mrBayes that assimilates sequences,
   taxonomic information and tree constraints as per xxx.
@@ -24,9 +24,8 @@
   investigated using conch.
 }
 \author{
-  Klaas Hartmann \email{klaas.hartmann@utas.edu.au}, 
-  Gavin Thomas \email{gavin.thomas@sheffield.ac.uk}
+  Klaas Hartmann \email{klaas.hartmann@utas.edu.au} Gavin
+  Thomas \email{gavin.thomas@sheffield.ac.uk}
 }
-
 \keyword{package}
 

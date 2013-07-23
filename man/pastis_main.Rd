@@ -2,23 +2,39 @@
 \alias{pastis_main}
 \title{Phylogenetic Assembly with Soft Taxonomic Inferences}
 \usage{
-  pastis_main(constraint_tree, taxa_list,
-    missing_clades = NA, sequences = NA,
+  pastis_main(pastisData = NULL, constraint_tree,
+    taxa_list, missing_clades = NA, sequences = NA,
     output_template = NA, output_file = "output.nex",
     paraphyly_constrains = TRUE,
     monophyly_constrains = TRUE, omit_sequences = FALSE)
 }
 \arguments{
-   \item{constraint_tree}{A tree with constraints that are
+  \item{pastisData}{Input data object of class pastisData}
+
+  \item{output_file}{The filename for the mrBayes output
+  file (will be overwritten if it exists)}
+
+  \item{paraphyly_constrains}{If TRUE, missing clades are
+  prevented from entering paraphyletic clades.}
+
+  \item{monophyly_constrains}{If TRUE, missing clades are
+  precented from entering monophyletic clades.}
+
+  \item{omit_sequences}{If set to TRUE the sequence file
+  (if any) will be ignored. This is useful for testing the
+  constraints created by pastis as mrBayes runs much
+  quicker without sequence data!}
+
+  \item{constraint_tree}{A tree with constraints that are
   forced to be present in all output trees. Either a
   filename to a nexus file readable by read.tree or a ape
   phylo object.}
-  
+
   \item{taxa_list}{A list of all taxa and their clades.
   Either a data frame with columns "taxa" and "clade" or a
   filename for a file readable by read.csv with those
   columns}
-  
+
   \item{missing_clades}{A file containing missing clades.
   Each line of the missing clades file consists of the
   missing clade, the word "include" or "exclude" and a list
@@ -27,7 +43,7 @@
   below the MRCA of the reference clades. Lines containing
   "exclude" specify that the missing clade cannot attach
   below the MRCA of the reference clades. #'}
- 
+
   \item{sequences}{A file with all the available sequence
   information in fasta format for details on that format
   see read.dna in the ape package.}
@@ -53,21 +69,6 @@
 
   see default_output_template for an example (which is used
   by default)}
-  
-   \item{output_file}{The filename for the mrBayes output
-  file (will be overwritten if it exists)}
-
-  \item{paraphyly_constrains}{If true, missing clades are
-  prevented from entering paraphyletic clades.}
-
-  \item{monophyly_constrains}{If true, missing clades are
-  prevented from entering monophyletic clades.}
-  
-  \item{omit_sequences}{If set to TRUE the sequence file
-  (if any) will be ignored. This is useful for testing the
-  constraints created by pastis as mrBayes runs much
-  quicker without sequence data!}
-
 }
 \value{
   NULL
@@ -103,6 +104,25 @@
   acting quite rowdy- weaving and squawking quite loudly
   "Pastis is delise" he burped with a sneese "but why is
   everything suddenly cloudy?"} -- \emph{Arne Mooers}
+}
+\examples{
+\dontrun{
+# Generate MrBayes input files with constraints
+data(accipitridaeFullPastis)
+pastis_main(accipitridaeFullPastis, output_file="Accipitridae")
+
+data(accipitridaeBasicPastis)
+pastis_main(accipitridaeBasicPastis, output_file="AccipitridaeBasic")
+}
+
+data(pastis_data_1)
+pastis_main(pastis_data_1, output_file="pastis_data_1")
+
+data(pastis_data_2)
+pastis_main(pastis_data_2, output_file="pastis_data_2")
+
+data(pastis_data_3)
+pastis_main(pastis_data_3, output_file="pastis_data_3")
 }
 \seealso{
   pastis_simple provides a simplified interface to

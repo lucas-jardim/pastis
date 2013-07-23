@@ -61,7 +61,7 @@ The main function of interest to users is pastis\_simple. If the correct files a
 
 Where PatchName is the name for your analysis. This will generate a file called PatchName.nexus which you would then use as input for mrBayes (version >=3.2).
 
-To get started quickly example input files are available \href{http://dx.doi.org/10.6084/m9.figshare.692180}{here}. These provide a good reference point for the range of possible PASTIS inputs. Files beginning pastis\_data are simple examples of the most basic PASTIS analyses using only an incomplete phylogeny and a species list. The files beginning Accipitridae provide a more comprehensive example. 
+To get started quickly example input files are available from figshare \href{http://dx.doi.org/10.6084/m9.figshare.692180}{here}. These provide a good reference point for the range of possible PASTIS inputs. Files beginning pastis\_data are simple examples of the most basic PASTIS analyses using only an incomplete phylogeny and a species list. The files beginning Accipitridae provide a more comprehensive example. All of these datasets are provided as part of the pastis package.
 
 The files required in your working directory for a PASTIS analysis are:
 
