@@ -15,11 +15,11 @@ Encoding: UTF-8
 LazyLoad: yes
 URL: http://cran.r-project.org/web/packages/pastis/
 Authors@R: c(person(given="Gavin", family="Thomas",
-        email="gavin.thomas@sheffield.ac.uk", role=c("aut", "cre")))
-Version: 0.1-1
-Date: 2013-07-23
+    email="gavin.thomas@sheffield.ac.uk", role=c("aut", "cre")))
+Version: 0.1-2
+Date: 2013-08-30
 Collate: 'pastis-package.R' 'pastis.R'
-Packaged: 2013-07-24 08:48:14 UTC; gavinthomas
+Packaged: 2013-09-11 12:36:09 UTC; gavinthomas
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2013-07-24 11:31:44
+Date/Publication: 2013-09-11 15:23:31

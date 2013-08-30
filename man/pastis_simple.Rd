@@ -26,8 +26,8 @@
 }
 \description{
   This function assimilates sequences, taxonomic
-  information and tree constraints into a mrBayes file as
-  per xxx. This permits the construction of trees that are
+  information and tree constraints into a mrBayes file.
+  This permits the construction of trees that are
   compatible with all of these sources of tdata and contain
   all known taxa.
 }
@@ -62,14 +62,6 @@
   below the MRCA of the reference clades.
 
   The mrBayes input file is written to base_name.nexus.
-
-  \preformatted{ }
-
-  \strong{PASTIS}: Phylogenetic Assembly with Soft
-  Taxonomic InferenceS? \preformatted{ A bright motmot was
-  acting quite rowdy- weaving and squawking quite loudly
-  "Pastis is delise" he burped with a sneese "but why is
-  everything suddenly cloudy?"} -- \emph{Arne Mooers}
 }
 \examples{
 # Generate MrBayes input files with constraints
@@ -83,11 +75,25 @@ pastis_simple(accipitridaeBasicPastis, base_name="AccipitridaeBasic")
 
 data(pastis_data_1)
 pastis_simple(pastis_data_1, base_name="pastis_data_1")
+unlink("pastis_data_1.nexus")
 
 data(pastis_data_2)
 pastis_simple(pastis_data_2, base_name="pastis_data_2")
+unlink("pastis_data_2.nexus")
 
 data(pastis_data_3)
 pastis_simple(pastis_data_3, base_name="pastis_data_3")
+unlink("pastis_data_3.nexus")
+}
+\seealso{
+  \link{pastis_main} provides a more flexible interface.
+
+  \preformatted{ }
+
+  \strong{PASTIS}: Phylogenetic Assembly with Soft
+  Taxonomic InferenceS? \preformatted{ A bright motmot was
+  acting quite rowdy- weaving and squawking quite loudly
+  "Pastis is delise" he burped with a sneese "but why is
+  everything suddenly cloudy?"} -- \emph{Arne Mooers}
 }
 

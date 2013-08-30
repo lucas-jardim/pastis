@@ -75,8 +75,8 @@
 }
 \description{
   This function assimilates sequences, taxonomic
-  information and tree constraints into a mrBayes file as
-  per xxx. This permits the construction of trees that are
+  information and tree constraints into a mrBayes file.
+  This permits the construction of trees that are
   compatible with all of these sources of tdata and contain
   all known taxa.
 }
@@ -87,7 +87,8 @@
   the tree structure specified by constraint_tree with
   missing taxa in taxa_list and missing clades in
   missing_clades added and placed loosely in the tree using
-  the constraint logic outlined in xxx .
+  the constraint logic outlined in Thomas et al. MEE (in
+  review) and Jetz et al. (2012 Nature, 491, 444-448).
 
   See read_input for a description of the required format
   of the input files. At a minimum the constraining input
@@ -109,28 +110,31 @@
 \dontrun{
 # Generate MrBayes input files with constraints
 data(accipitridaeFullPastis)
-pastis_main(accipitridaeFullPastis, output_file="Accipitridae")
+pastis_main(accipitridaeFullPastis, output_file="Accipitridae.nexus")
 
 data(accipitridaeBasicPastis)
-pastis_main(accipitridaeBasicPastis, output_file="AccipitridaeBasic")
+pastis_main(accipitridaeBasicPastis, output_file="AccipitridaeBasic.nexus")
 }
 
 data(pastis_data_1)
 pastis_main(pastis_data_1, output_file="pastis_data_1")
+unlink("pastis_data_1.nexus")
 
 data(pastis_data_2)
 pastis_main(pastis_data_2, output_file="pastis_data_2")
+unlink("pastis_data_2.nexus")
 
 data(pastis_data_3)
 pastis_main(pastis_data_3, output_file="pastis_data_3")
+unlink("pastis_data_3.nexus")
 }
 \seealso{
-  pastis_simple provides a simplified interface to
+  \link{pastis_simple} provides a simplified interface to
   pastis_main.
 
-  read_input describes the required file formats
+  \link{read_input} describes the required file formats
 
-  default_output_template provides an example of the output
-  template (also the default)
+  \link{default_output_template} provides an example of the
+  output template (also the default)
 }
 

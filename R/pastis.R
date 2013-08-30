@@ -3,7 +3,7 @@ require(ape)
 #' A simplified interface to the main pastis function. 
 #' 
 #' This function assimilates sequences, taxonomic information and tree constraints 
-#' into a mrBayes file as per xxx. This permits the construction of trees that are 
+#' into a mrBayes file. This permits the construction of trees that are 
 #' compatible with all of these sources of tdata and contain all known taxa.
 #' 
 #' This is a simplified version of pastis_main which assumes that (i) the data are input as a pastisData object (e.g. created with read_input), or (ii) the input files 
@@ -30,6 +30,7 @@ require(ape)
 #' 
 #' The mrBayes input file is written to base_name.nexus.
 #' 
+#' @seealso \link{pastis_main} provides a more flexible interface.
 #' 
 #' \preformatted{
 #' }
@@ -47,20 +48,23 @@ require(ape)
 #' \dontrun{
 #' data(accipitridaeFullPastis)
 #' pastis_simple(accipitridaeFullPastis, base_name="Accipitridae")
-#' 
+#'
 #' data(accipitridaeBasicPastis)
 #' pastis_simple(accipitridaeBasicPastis, base_name="AccipitridaeBasic")
 #' }
 #'
 #' data(pastis_data_1)
 #' pastis_simple(pastis_data_1, base_name="pastis_data_1")
+#' unlink("pastis_data_1.nexus")
 #'
 #' data(pastis_data_2)
 #' pastis_simple(pastis_data_2, base_name="pastis_data_2")
+#' unlink("pastis_data_2.nexus")
 #'
 #' data(pastis_data_3)
 #' pastis_simple(pastis_data_3, base_name="pastis_data_3")
-#' 
+#' unlink("pastis_data_3.nexus")
+#'
 #' @inheritParams pastis_main
 #' @param base_name The base name for all input files may include a leading directory, but should 
 #' not include a trailing .
@@ -99,14 +103,14 @@ pastis_simple <- function(pastisData=NULL,base_name,paraphyly_constrains=TRUE,mo
 #' Phylogenetic Assembly with Soft Taxonomic Inferences
 #' 
 #' This function assimilates sequences, taxonomic information and tree constraints 
-#' into a mrBayes file as per xxx. This permits the construction of trees that are 
+#' into a mrBayes file. This permits the construction of trees that are 
 #' compatible with all of these sources of tdata and contain all known taxa.
 #' 
 #' This is the main function in pastis which assimilates sequences, taxonomic 
 #' information and tree constraints and creates a mrBayes input file. This input 
 #' file contains the tree structure specified by constraint_tree with missing taxa 
 #' in taxa_list and missing clades in missing_clades added and placed loosely in the 
-#' tree using the constraint logic outlined in xxx . 
+#' tree using the constraint logic outlined in Thomas et al. MEE (in review) and Jetz et al. (2012 Nature, 491, 444-448). 
 #' 
 #' See read_input for a description of the required format of the input files. At a 
 #' minimum the constraining input tree and taxa list must be provided.
@@ -135,30 +139,33 @@ pastis_simple <- function(pastisData=NULL,base_name,paraphyly_constrains=TRUE,mo
 #' @param omit_sequences If set to TRUE the sequence file (if any) will be ignored. This is useful for testing the constraints
 #' created by pastis as mrBayes runs much quicker without sequence data!
 #' @return NULL
-#' @seealso pastis_simple provides a simplified interface to pastis_main. 
+#' @seealso \link{pastis_simple} provides a simplified interface to pastis_main.
 #' 
-#' read_input describes the required file formats
+#' \link{read_input} describes the required file formats
 #' 
-#' default_output_template provides an example of the output template (also the default)
+#' \link{default_output_template} provides an example of the output template (also the default)
 #'
 #' @examples
 #' \dontrun{
 #' # Generate MrBayes input files with constraints
 #' data(accipitridaeFullPastis)
-#' pastis_main(accipitridaeFullPastis, output_file="Accipitridae")
+#' pastis_main(accipitridaeFullPastis, output_file="Accipitridae.nexus")
 #'
 #' data(accipitridaeBasicPastis)
-#' pastis_main(accipitridaeBasicPastis, output_file="AccipitridaeBasic")
+#' pastis_main(accipitridaeBasicPastis, output_file="AccipitridaeBasic.nexus")
 #' }
 #'
 #' data(pastis_data_1)
 #' pastis_main(pastis_data_1, output_file="pastis_data_1")
+#' unlink("pastis_data_1.nexus")
 #'
 #' data(pastis_data_2)
 #' pastis_main(pastis_data_2, output_file="pastis_data_2")
+#' unlink("pastis_data_2.nexus")
 #'
 #' data(pastis_data_3)
 #' pastis_main(pastis_data_3, output_file="pastis_data_3")
+#' unlink("pastis_data_3.nexus")
 #' 
 #' @export
 pastis_main <- function(pastisData=NULL, constraint_tree,taxa_list,missing_clades=NA,sequences=NA,output_template=NA,output_file='output.nex',paraphyly_constrains=TRUE,monophyly_constrains=TRUE,omit_sequences=FALSE)
@@ -581,14 +588,13 @@ read_input <- function(constraint_tree,taxa_list,missing_clades=NA,sequences=NA,
   return(pastis_object)
 }
 
-#' Clade completeness check
-#' 
-#' Determines all clades represented by a set of taxa and checks whether all 
-#' species in those clades are in that set of taxa
-#' 
-#' @inheritParams get_clades
-#' @return logical, whethe the clades were completely represented
-#' @export
+# Clade completeness check
+# 
+# Determines all clades represented by a set of taxa and checks whether all 
+# species in those clades are in that set of taxa
+# 
+# @inheritParams get_clades
+# @return logical, whethe the clades were completely represented
 is_complete_clade<-function(set,clades)
 {
   present_clades<-get_clades(set,clades)
@@ -596,15 +602,14 @@ is_complete_clade<-function(set,clades)
   return(length(intersect(required_taxa,set))==length(required_taxa))
 }
 
-#' Returns the clades for a set of taxa
-#' 
-#' This function determines which clades are represented by a set of taxa
-#' 
-#'  @param set A vector of taxa
-#'  @param clades A list of clades, each element contains a vector of taxa
-#'  belonging to that clade
-#'  @return A vector of clades represented by the taxa
-#'  @export
+# Returns the clades for a set of taxa
+# 
+# This function determines which clades are represented by a set of taxa
+# 
+#  @param set A vector of taxa
+#  @param clades A list of clades, each element contains a vector of taxa
+#  belonging to that clade
+#  @return A vector of clades represented by the taxa
 get_clades <-function(set,clades)
 {
   out=c()
@@ -622,33 +627,31 @@ e<-new.env()
 #constraint_id<-0
 #constraint_class_id<-list()
 
-#' Reset the constraint counters 
-#' 
-#' Resets the constraint counters that are used to give unique names to
-#' the constraints
-#'
-#' @return Nothing 
-#' @export
+# Reset the constraint counters 
+# 
+# Resets the constraint counters that are used to give unique names to
+# the constraints
+#
+# @return Nothing 
 reset_constraint_counters <- function()
 {
   e$constraint_id<-0
   e$constraint_class_id<-list()
 }
 
-#' Constraint creator
-#' 
-#' Creates mrBayes style constraints for the supplied list of species. 
-#' Constraints are named according to either the supplied name or by the
-#' supplied name_class. If name_class is used each new constraint is 
-#' incremented.
-#' 
-#' @param type constraint type either "hard","negative" or "partial"
-#' @param include the first list of taxa
-#' @param exclude the second list of taxa (not used for hard constraints)
-#' @param name the name for the constraint. If none specified they are automatically assigned
-#' @param name_class alternatively automatically incremented names
-#' @return A string containing the constraint
-#' @export
+# Constraint creator
+# 
+# Creates mrBayes style constraints for the supplied list of species. 
+# Constraints are named according to either the supplied name or by the
+# supplied name_class. If name_class is used each new constraint is 
+# incremented.
+# 
+# @param type constraint type either "hard","negative" or "partial"
+# @param include the first list of taxa
+# @param exclude the second list of taxa (not used for hard constraints)
+# @param name the name for the constraint. If none specified they are automatically assigned
+# @param name_class alternatively automatically incremented names
+# @return A string containing the constraint
 create_constraint <- function(type,include,exclude=c(),name=NA,name_class=NA) {
   if (length(include) == 1)
   {
@@ -683,10 +686,10 @@ create_constraint <- function(type,include,exclude=c(),name=NA,name_class=NA) {
 }
 
 
-#' Add sets of tips to a phylo tree
-#' 
-#' @param tree an ape tree
-#' @return The modified ape tree
+# Add sets of tips to a phylo tree
+# 
+# @param tree an ape tree
+# @return The modified ape tree
 add_tip_sets <- function(tree)
 {
   tip.sets <- list()
@@ -698,11 +701,11 @@ add_tip_sets <- function(tree)
   return(tree)
 }
 
-#' Find a cherry (may be a polytomy)
-#'
-#'
-#' @param tree An ape tree
-#' @return An index to the edge above the cherry
+# Find a cherry (may be a polytomy)
+#
+#
+# @param tree An ape tree
+# @return An index to the edge above the cherry
 find_cherry<- function(tree)
 {
   n_species <- length(tree$tip.label)
@@ -717,16 +720,16 @@ find_cherry<- function(tree)
   return(edge)
 }
 
-#' Collapse a cherry (may be a polytomy)
-#'
-#'
-#' @param tree An ape tree
-#' @param edge The edge to collapse (NA to choose the first cherry)
-#' @param combine For polytomies use this to choose which tips to combine. Specified as a list
-#'   containing elements between 1 and the number of tips in the polytomy. Tips are numbered according
-#'   to their order in tree$edge. Omit or set to NA to combine all tips.
-#' @return A list containing: 1) the tree with a collapsed cherry 
-#'   2) an index to the edge that was collapsed
+# Collapse a cherry (may be a polytomy)
+#
+#
+# @param tree An ape tree
+# @param edge The edge to collapse (NA to choose the first cherry)
+# @param combine For polytomies use this to choose which tips to combine. Specified as a list
+#   containing elements between 1 and the number of tips in the polytomy. Tips are numbered according
+#   to their order in tree$edge. Omit or set to NA to combine all tips.
+# @return A list containing: 1) the tree with a collapsed cherry 
+#   2) an index to the edge that was collapsed
 collapse_cherry <- function(tree,edge=NA,combine=NA)
 {
   
@@ -880,13 +883,15 @@ collapse_cherry <- function(tree,edge=NA,combine=NA)
 #'
 #' \dontrun{
 #'
-#' # Check constraints for all missing taxa (takes ~20 seconds to run)
+#' # Check constraints for all missing taxa (takes ~6 seconds to run: sped up by Anonymous Reviewer 2)
 #' conch(pastis_data_3_trees[[1]], pastis_data_3_trees[[2]])
 #'
 #' }
 #'
 #' # Check constraints for missing taxon "a_4"
 #' conch(pastis_data_3_trees[[1]], pastis_data_3_trees[[2]], species_set="a_4")
+#' unlink("taxonposition_a_4.tree")
+#' 
 #' @export
 conch <- function(constraint_tree,mrbayes_output,simple_edge_scaling=TRUE,species_set=NA)
 {
@@ -903,12 +908,17 @@ conch <- function(constraint_tree,mrbayes_output,simple_edge_scaling=TRUE,specie
   #Load trees
   if(class(mrbayes_output)=="character") { mrbayes_trees<-read.nexus(mrbayes_output) } else { mrbayes_trees<-mrbayes_output }
   if(class(mrbayes_trees)!='multiPhylo') { stop('invalid tree(s) specified')}
-
+  
   missing_taxa<-setdiff(mrbayes_trees[[1]]$tip.label,constraining_taxa)
   if (is.na(species_set))
   {
     species_set<-missing_taxa
   }
+
+  #Transform multiPhylo object into list (thanks to Anonymous MEE reviewer 2 for the suggestion)
+  mrbayes_trees = .compressTipLabel(mrbayes_trees)
+  mrbayes_label = attr(mrbayes_trees, "TipLabel")
+  mrbayes_trees = unclass(mrbayes_trees)  
 
   #For each missing taxon M
   count<-1
@@ -924,6 +934,7 @@ conch <- function(constraint_tree,mrbayes_output,simple_edge_scaling=TRUE,specie
     for (tree_index in 1:length(mrbayes_trees))
     {
 	  this_tree<-mrbayes_trees[[tree_index]]
+	  this_tree$tip.label = mrbayes_label  
       #Copy & trim tree to include only constraining taxa and M
       this_tree<-drop.tip(this_tree,setdiff(this_tree$tip.label,c(constraining_taxa,taxon)))
       #Determine descendants of M's pendant edge
