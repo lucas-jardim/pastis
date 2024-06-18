@@ -1,5 +1,4 @@
-require(caper)
-require(ape)
+
 #' A simplified interface to the main pastis function. 
 #' 
 #' This function assimilates sequences, taxonomic information and tree constraints 
@@ -132,6 +131,22 @@ pastis_simple <- function(pastisData=NULL,base_name,paraphyly_constrains=TRUE,mo
 #' 
 #' @param pastisData Input data object of class pastisData
 #' @inheritParams read_input
+#' @param output_template The filename for a template for the output nexus file. This file should 
+#' look like a regular mrBayes input file with special tags replacing content that will be filled by
+#' pastis. In particular:
+#' 
+#' <sequences> will be replaced by the sequences (and should go below the MATRIX line)
+#' 
+#' <ntax> the number of taxa (i.e. "ntax=<ntax>" must be somewhere in your template)
+#' 
+#' <nchar> the number of characters
+#' 
+#' <constraints> the constraints will go here
+#' 
+#' <outputfile> where the summaries will be written, (i.e. \verb{"sumt filename=<outputfile> burnin ...."} should be in your template) 
+#' 
+#' see default_output_template for an example (which is used by default)
+#' 
 #' @param output_file The filename for the mrBayes output file (will be overwritten if it exists)
 #' @param paraphyly_constrains If TRUE, missing clades are prevented from entering
 #' paraphyletic clades.
@@ -193,7 +208,7 @@ pastis_main <- function(pastisData=NULL, constraint_tree,taxa_list,missing_clade
 	input<-read_input(constraint_tree,taxa_list,missing_clades,sequences,output_template)
 	}
 	} else {
-		if (class(pastisData)!="pastisData") {
+		if (!inherits(pastisData, "pastisData")) {
 		stop("Object is not of class pastisData")
 		}
 	input <- pastisData 
@@ -261,7 +276,7 @@ pastis_main <- function(pastisData=NULL, constraint_tree,taxa_list,missing_clade
       {
       for (s in 2:(n_leaves-1))
       {          
-        for (combination in combn(seq(n_leaves),s,simplify=FALSE))
+        for (combination in utils::combn(seq(n_leaves),s,simplify=FALSE))
         {
           collapsed_temp<-collapse_cherry(tree,edge,combination)
           cherry_taxa <- collapsed_temp[[1]]$tip.sets[[collapsed_temp[[2]]]]
@@ -440,7 +455,7 @@ pastis_main <- function(pastisData=NULL, constraint_tree,taxa_list,missing_clade
 #' reference clades (all separated by commas). Lines containing "include" specify
 #' that a taxon is contained below the MRCA of the reference clades. Lines containing "exclude"
 #' specify that the missing clade cannot attach below the MRCA of the reference clades.
-#' #' @param output_template The filename for a template for the output nexus file. This file should 
+#' @param output_template The filename for a template for the output nexus file. This file should 
 #' look like a regular mrBayes input file with special tags replacing content that will be filled by
 #' pastis. In particular:
 #' 
@@ -488,13 +503,13 @@ read_input <- function(constraint_tree,taxa_list,missing_clades=NA,sequences=NA,
   }
   
   #Load and check the constraint tree
-  if(class(constraint_tree)=='character') { constraint_tree=read.tree(constraint_tree) }
-  if(class(constraint_tree)!='phylo') { stop('invalid constraint tree specified')}
-  constraint_tree <- reorder(constraint_tree,'pruningwise')
+  if(inherits(constraint_tree, 'character')) { constraint_tree=ape::read.tree(constraint_tree) }
+  if(!inherits(constraint_tree, 'phylo')) { stop('invalid constraint tree specified')}
+  constraint_tree <- ape::reorder.phylo(constraint_tree,'pruningwise')
   constraint_tree <- add_tip_sets(constraint_tree)
   #Load and check the taxa list
-  if(class(taxa_list)=='character') { taxa_list=read.csv(taxa_list) }
-  if(class(taxa_list)!='data.frame') {stop('invalid taxa list specified')}
+  if(inherits(taxa_list, 'character')) { taxa_list=utils::read.csv(taxa_list) }
+  if(!inherits(taxa_list, 'data.frame')) {stop('invalid taxa list specified')}
   if(length(intersect(names(taxa_list),c('taxon','clade')))!=2) { stop('invalid column names in taxa list')}
   #A character version of the taxa list
   taxa_list$taxa_char <- as.character(taxa_list$taxon)
@@ -573,9 +588,9 @@ read_input <- function(constraint_tree,taxa_list,missing_clades=NA,sequences=NA,
     sequences<-matrix(c(1,1))
   } else
   {
-    e<-try(sequences <- read.dna(sequences, format="fasta", as.character=TRUE))
+    e<-try(sequences <- ape::read.dna(sequences, format="fasta", as.character=TRUE))
     
-    if(class(e)=='try-error')
+    if(inherits(e, 'try-error'))
     {
       stop(paste('could not load sequence data from',sequences,'. See read.dna for a description of the fasta format.'))
     }
@@ -897,17 +912,17 @@ conch <- function(constraint_tree,mrbayes_output,simple_edge_scaling=TRUE,specie
 {
   
   #Load and check the constraint tree
-  if(class(constraint_tree)=='character') { constraint_tree=read.tree(constraint_tree) }
-  if(class(constraint_tree)!='phylo') { stop('invalid constraint tree specified')}
-  constraint_tree <- reorder(constraint_tree,'cladewise')
+  if(inherits(constraint_tree, 'character')) { constraint_tree=ape::read.tree(constraint_tree) }
+  if(!inherits(constraint_tree, 'phylo')) { stop('invalid constraint tree specified')}
+  constraint_tree <- ape::reorder.phylo(constraint_tree,'cladewise')
   
   
   #Get list of all constraining taxa
   constraining_taxa<-constraint_tree$tip.label
   
   #Load trees
-  if(class(mrbayes_output)=="character") { mrbayes_trees<-read.nexus(mrbayes_output) } else { mrbayes_trees<-mrbayes_output }
-  if(class(mrbayes_trees)!='multiPhylo') { stop('invalid tree(s) specified')}
+  if(inherits(mrbayes_output, "character")) { mrbayes_trees<-ape::read.nexus(mrbayes_output) } else { mrbayes_trees<-mrbayes_output }
+  if(!inherits(mrbayes_trees, 'multiPhylo')) { stop('invalid tree(s) specified')}
   
   missing_taxa<-setdiff(mrbayes_trees[[1]]$tip.label,constraining_taxa)
   if (is.na(species_set))
@@ -916,7 +931,7 @@ conch <- function(constraint_tree,mrbayes_output,simple_edge_scaling=TRUE,specie
   }
 
   #Transform multiPhylo object into list (thanks to Anonymous MEE reviewer 2 for the suggestion)
-  mrbayes_trees = .compressTipLabel(mrbayes_trees)
+  mrbayes_trees = ape::.compressTipLabel(mrbayes_trees)
   mrbayes_label = attr(mrbayes_trees, "TipLabel")
   mrbayes_trees = unclass(mrbayes_trees)  
 
@@ -936,18 +951,18 @@ conch <- function(constraint_tree,mrbayes_output,simple_edge_scaling=TRUE,specie
 	  this_tree<-mrbayes_trees[[tree_index]]
 	  this_tree$tip.label = mrbayes_label  
       #Copy & trim tree to include only constraining taxa and M
-      this_tree<-drop.tip(this_tree,setdiff(this_tree$tip.label,c(constraining_taxa,taxon)))
+      this_tree<-ape::drop.tip(this_tree,setdiff(this_tree$tip.label,c(constraining_taxa,taxon)))
       #Determine descendants of M's pendant edge
       edge<-this_tree$edge[,2]==which(this_tree$tip.label==taxon)
-      this_tree<-extract.clade(this_tree,this_tree$edge[this_tree$edge[,2]==which(this_tree$tip.label==taxon),1])
+      this_tree<-ape::extract.clade(this_tree,this_tree$edge[this_tree$edge[,2]==which(this_tree$tip.label==taxon),1])
 
       mrca_descendants <- intersect(this_tree$tip.label,constraining_taxa)
       if (length(mrca_descendants)==1)
       {
-        mrca_edge<-which.edge(constraint_tree,mrca_descendants)[1]
+        mrca_edge<-ape::which.edge(constraint_tree,mrca_descendants)[1]
       } else
       {
-        mrca_node<-constraint_tree$edge[which.edge(constraint_tree,mrca_descendants)[1],1]
+        mrca_node<-constraint_tree$edge[ape::which.edge(constraint_tree,mrca_descendants)[1],1]
         mrca_edge<-which(constraint_tree$edge[,2]==mrca_node)
       }
       if (simple_edge_scaling)
@@ -958,7 +973,7 @@ conch <- function(constraint_tree,mrbayes_output,simple_edge_scaling=TRUE,specie
         constraint_tree$edge.length[mrca_edge]<-constraint_tree$edge.length[mrca_edge]+1
       }
     }
-    write.tree(constraint_tree,file=paste('taxonposition_',taxon,'.tree',sep=''))
+    ape::write.tree(constraint_tree,file=paste('taxonposition_',taxon,'.tree',sep=''))
   }
 }
 #conch('1.tree','1.nexus.t')  
