@@ -101,7 +101,7 @@ pastis_main(accipitridaeFullPastis, output_file="Accipitridae.nexus")
 
 data(accipitridaeBasicPastis)
 pastis_main(accipitridaeBasicPastis, output_file="AccipitridaeBasic.nexus")
-}
+
 
 data(pastis_data_1)
 pastis_main(pastis_data_1, output_file="pastis_data_1")
@@ -114,7 +114,7 @@ unlink("pastis_data_2.nexus")
 data(pastis_data_3)
 pastis_main(pastis_data_3, output_file="pastis_data_3")
 unlink("pastis_data_3.nexus")
-
+}
 }
 \seealso{
 \link{pastis_simple} provides a simplified interface to pastis_main.

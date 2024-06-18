@@ -50,7 +50,7 @@
 #'
 #' data(accipitridaeBasicPastis)
 #' pastis_simple(accipitridaeBasicPastis, base_name="AccipitridaeBasic")
-#' }
+#' 
 #'
 #' data(pastis_data_1)
 #' pastis_simple(pastis_data_1, base_name="pastis_data_1")
@@ -63,6 +63,7 @@
 #' data(pastis_data_3)
 #' pastis_simple(pastis_data_3, base_name="pastis_data_3")
 #' unlink("pastis_data_3.nexus")
+#'}
 #'
 #' @inheritParams pastis_main
 #' @param base_name The base name for all input files may include a leading directory, but should 
@@ -168,7 +169,7 @@ pastis_simple <- function(pastisData=NULL,base_name,paraphyly_constrains=TRUE,mo
 #'
 #' data(accipitridaeBasicPastis)
 #' pastis_main(accipitridaeBasicPastis, output_file="AccipitridaeBasic.nexus")
-#' }
+#' 
 #'
 #' data(pastis_data_1)
 #' pastis_main(pastis_data_1, output_file="pastis_data_1")
@@ -181,7 +182,7 @@ pastis_simple <- function(pastisData=NULL,base_name,paraphyly_constrains=TRUE,mo
 #' data(pastis_data_3)
 #' pastis_main(pastis_data_3, output_file="pastis_data_3")
 #' unlink("pastis_data_3.nexus")
-#' 
+#' }
 #' @export
 pastis_main <- function(pastisData=NULL, constraint_tree,taxa_list,missing_clades=NA,sequences=NA,output_template=NA,output_file='output.nex',paraphyly_constrains=TRUE,monophyly_constrains=TRUE,omit_sequences=FALSE)
 {

@@ -64,7 +64,7 @@ pastis_simple(accipitridaeFullPastis, base_name="Accipitridae")
 
 data(accipitridaeBasicPastis)
 pastis_simple(accipitridaeBasicPastis, base_name="AccipitridaeBasic")
-}
+
 
 data(pastis_data_1)
 pastis_simple(pastis_data_1, base_name="pastis_data_1")
@@ -77,6 +77,7 @@ unlink("pastis_data_2.nexus")
 data(pastis_data_3)
 pastis_simple(pastis_data_3, base_name="pastis_data_3")
 unlink("pastis_data_3.nexus")
+}
 
 }
 \seealso{
